@@ -1,0 +1,2 @@
+# TradeHisabKitab
+For trading journal
