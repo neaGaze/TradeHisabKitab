@@ -91,7 +91,7 @@ export async function getTradingPnlForYear(year: number): Promise<{ data?: numbe
 
     const { data, error } = await supabase
       .from('trades')
-      .select('side, quantity, entry_price, exit_price, fees')
+      .select('side, quantity, entry_price, exit_price, fees, leverage')
       .eq('user_id', user.id)
       .gte('trade_date', startDate)
       .lt('trade_date', endDate)
@@ -99,8 +99,9 @@ export async function getTradingPnlForYear(year: number): Promise<{ data?: numbe
     if (error) return { error: error.message }
 
     const totalPnl = (data || []).reduce((sum, trade) => {
+      if (trade.exit_price === 0) return sum // skip open trades
       const multiplier = trade.side === 'long' ? 1 : -1
-      const pnl = multiplier * trade.quantity * (trade.exit_price - trade.entry_price) - trade.fees
+      const pnl = multiplier * trade.quantity * (trade.exit_price - trade.entry_price) * (trade.leverage ?? 1) - trade.fees
       return sum + pnl
     }, 0)
 

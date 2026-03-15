@@ -9,6 +9,7 @@ export const tradeSchema = z.object({
   entry_price: z.coerce.number().nonnegative('Entry price must be non-negative'),
   exit_price: z.coerce.number().nonnegative('Exit price must be non-negative'),
   fees: z.coerce.number().nonnegative('Fees must be non-negative').default(0),
+  leverage: z.coerce.number().min(1, 'Leverage must be at least 1').default(1),
   notes: z.string().max(500, 'Notes max 500 chars').optional().nullable(),
 })
 

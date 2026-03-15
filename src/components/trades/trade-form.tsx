@@ -40,6 +40,7 @@ export function TradeForm({ defaultValues, onSubmit, defaultDate }: TradeFormPro
       entry_price: defaultValues?.entry_price,
       exit_price: defaultValues?.exit_price,
       fees: defaultValues?.fees ?? 0,
+      leverage: defaultValues?.leverage ?? 1,
       notes: defaultValues?.notes ?? '',
     },
   })
@@ -142,6 +143,24 @@ export function TradeForm({ defaultValues, onSubmit, defaultDate }: TradeFormPro
           )}
         </div>
       </div>
+
+      {/* Leverage (forex/futures only) */}
+      {(assetClass === 'forex' || assetClass === 'futures') && (
+        <div className="space-y-2">
+          <Label htmlFor="leverage">Leverage</Label>
+          <Input
+            id="leverage"
+            type="number"
+            step="1"
+            min="1"
+            placeholder="1"
+            {...register('leverage')}
+          />
+          {errors.leverage && (
+            <p className="text-xs text-destructive">{errors.leverage.message}</p>
+          )}
+        </div>
+      )}
 
       {/* Row 4: Entry + Exit Price */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

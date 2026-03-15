@@ -17,9 +17,10 @@ export default async function TradesPage({ searchParams }: TradesPageProps) {
   const result = await getTradesForDate(selectedDate)
   const trades: Trade[] = result.data ?? []
 
-  const totalPnl = trades.reduce((sum, t) => sum + calculatePnl(t), 0)
-  const winCount = trades.filter((t) => calculatePnl(t) > 0).length
-  const lossCount = trades.filter((t) => calculatePnl(t) < 0).length
+  const pnls = trades.map(calculatePnl).filter((p): p is number => p !== null)
+  const totalPnl = pnls.reduce((sum, p) => sum + p, 0)
+  const winCount = pnls.filter((p) => p > 0).length
+  const lossCount = pnls.filter((p) => p < 0).length
 
   return (
     <div className="space-y-6">

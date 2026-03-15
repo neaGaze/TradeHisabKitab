@@ -23,7 +23,7 @@ function formatCurrency(n: number) {
 
 export function TradeRowItem({ trade, onEdit, onDelete }: TradeRowProps) {
   const pnl = calculatePnl(trade)
-  const pnlColor = pnl >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
+  const pnlColor = pnl === null ? 'text-muted-foreground' : pnl >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
   const sideColor = trade.side === 'long' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
 
   return (
@@ -41,7 +41,7 @@ export function TradeRowItem({ trade, onEdit, onDelete }: TradeRowProps) {
       <TableCell className="text-right">{formatCurrency(trade.entry_price)}</TableCell>
       <TableCell className="text-right">{formatCurrency(trade.exit_price)}</TableCell>
       <TableCell className={`text-right font-semibold ${pnlColor}`}>
-        {pnl >= 0 ? '+' : ''}{formatCurrency(pnl)}
+        {pnl === null ? 'Open' : `${pnl >= 0 ? '+' : ''}${formatCurrency(pnl)}`}
       </TableCell>
       <TableCell className="text-right">
         <div className="flex items-center justify-end gap-1">

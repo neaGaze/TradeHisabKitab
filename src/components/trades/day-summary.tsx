@@ -18,7 +18,7 @@ function formatCurrency(n: number) {
 export function DaySummary({ trades, date }: DaySummaryProps) {
   if (trades.length === 0) return null
 
-  const pnls = trades.map(calculatePnl)
+  const pnls = trades.map(calculatePnl).filter((p): p is number => p !== null)
   const totalPnl = pnls.reduce((s, p) => s + p, 0)
   const winCount = pnls.filter((p) => p > 0).length
   const lossCount = pnls.filter((p) => p < 0).length

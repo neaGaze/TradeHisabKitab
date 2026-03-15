@@ -13,6 +13,7 @@ export interface Trade {
   entry_price: number
   exit_price: number
   fees: number
+  leverage: number
   notes: string | null
   created_at: string
   updated_at: string

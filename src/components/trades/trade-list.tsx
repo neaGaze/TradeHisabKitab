@@ -129,6 +129,7 @@ export function TradeList({ trades }: TradeListProps) {
                 entry_price: editingTrade.entry_price,
                 exit_price: editingTrade.exit_price,
                 fees: editingTrade.fees,
+                leverage: editingTrade.leverage ?? 1,
                 notes: editingTrade.notes,
               }}
               onSubmit={handleUpdate}
@@ -152,7 +153,7 @@ function MobileTradeCard({
   onDelete: (id: string) => void
 }) {
   const pnl = calculatePnl(trade)
-  const pnlColor = pnl >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
+  const pnlColor = pnl === null ? 'text-muted-foreground' : pnl >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
   const sideColor = trade.side === 'long' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
 
   const fmt = (n: number) =>
@@ -167,7 +168,7 @@ function MobileTradeCard({
           <span className={`text-xs font-medium capitalize ${sideColor}`}>{trade.side}</span>
         </div>
         <span className={`font-semibold text-sm ${pnlColor}`}>
-          {pnl >= 0 ? '+' : ''}{fmt(pnl)}
+          {pnl === null ? 'Open' : `${pnl >= 0 ? '+' : ''}${fmt(pnl)}`}
         </span>
       </div>
 

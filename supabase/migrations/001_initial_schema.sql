@@ -10,6 +10,7 @@ create table if not exists public.trades (
   entry_price numeric not null check (entry_price >= 0),
   exit_price numeric not null check (exit_price >= 0),
   fees numeric not null default 0 check (fees >= 0),
+  leverage numeric not null default 1 check (leverage >= 1),
   notes text,
   created_at timestamptz default now() not null,
   updated_at timestamptz default now() not null
@@ -85,8 +86,8 @@ begin
     t.trade_date,
     sum(
       case when t.side = 'long'
-        then (t.exit_price - t.entry_price) * t.quantity - t.fees
-        else (t.entry_price - t.exit_price) * t.quantity - t.fees
+        then (t.exit_price - t.entry_price) * t.quantity * t.leverage - t.fees
+        else (t.entry_price - t.exit_price) * t.quantity * t.leverage - t.fees
       end
     ) as total_pnl,
     count(*) as trade_count
@@ -94,6 +95,7 @@ begin
   where t.user_id = p_user_id
     and t.trade_date >= p_start_date
     and t.trade_date <= p_end_date
+    and t.exit_price <> 0
   group by t.trade_date
   order by t.trade_date;
 end;

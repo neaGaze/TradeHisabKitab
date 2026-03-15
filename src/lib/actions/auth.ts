@@ -22,7 +22,7 @@ export async function signUp(formData: FormData) {
     return { error: error.message }
   }
 
-  redirect('/auth/callback')
+  redirect('/')
 }
 
 export async function signIn(formData: FormData) {
